@@ -18,6 +18,19 @@ class PatientSerializer(serializers.ModelSerializer):
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    doctor = DoctorSerializer(read_only=True)
+    patient = PatientSerializer(read_only=True)
+    doctor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Doctor.objects.all(),
+        write_only=True,
+        source="doctor",
+    )
+    patient_id = serializers.PrimaryKeyRelatedField(
+        queryset=Patient.objects.all(),
+        write_only=True,
+        source="patient",
+    )
+
     class Meta:
         model = Appointment
-        fields = "__all__"
+        fields = ["id", "doctor", "patient", "date", "notes", "doctor_id", "patient_id"]

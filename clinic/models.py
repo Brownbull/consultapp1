@@ -7,7 +7,7 @@ class Doctor(models.Model):
     email = models.EmailField()
 
     def __str__(self):
-        return f"{self.get_full_name()} ({self.specialty})"
+        return f"{self.name} ({self.specialty})"
 
 
 class Patient(models.Model):
@@ -20,8 +20,16 @@ class Patient(models.Model):
 
 
 class Appointment(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(
+        Doctor,
+        on_delete=models.CASCADE,
+        related_name="appointments",
+    )
+    patient = models.ForeignKey(
+        Patient,
+        on_delete=models.CASCADE,
+        related_name="appointments",
+    )
     date = models.DateTimeField()
     notes = models.TextField(blank=True)
 
